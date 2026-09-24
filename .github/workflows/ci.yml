@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install SUMO
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sumo sumo-tools sumo-doc
+          echo "SUMO_HOME=/usr/share/sumo" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: |
+          pip install -e ".[dev]"
+          pip install tensorboard
+
+      - name: Run ruff linting
+        run: |
+          ruff check trafficrl tests
+
+      - name: Run ruff format check
+        run: |
+          ruff format --check trafficrl tests
+
+      - name: Run tests
+        run: |
+          pytest tests/ -v --tb=short
+
+      - name: Test environment smoke test
+        run: |
+          python -m trafficrl test-env --config configs/single.yaml --steps 50
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: |
+            logs/
+            output/
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install build dependencies
+        run: |
+          pip install build twine
+
+      - name: Build package
+        run: |
+          python -m build
+
+      - name: Check package
+        run: |
+          twine check dist/*
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
