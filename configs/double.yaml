@@ -1,0 +1,48 @@
+network:
+  type: "double"
+  grid_size: 2
+  lane_length: 100.0
+  num_lanes: 1
+  speed_limit: 13.89
+  network_file: "networks/double.net.xml"
+
+simulation:
+  steps: 3600
+  step_length: 1.0
+  begin: 0
+  seed: 42
+  gui: false
+
+agent:
+  policy: "MlpPolicy"
+  learning_rate: 3e-4
+  n_steps: 2048
+  batch_size: 64
+  n_epochs: 10
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_range: 0.2
+  ent_coef: 0.01
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+  total_timesteps: 100000
+  tensorboard_log: "logs/tensorboard"
+
+reward:
+  wait_time_weight: -1.0
+  phase_change_penalty: -0.1
+  queue_length_weight: 0.0
+
+eval:
+  episodes: 10
+  deterministic: true
+  render: false
+
+curriculum:
+  enabled: false
+  stages: ["single", "double", "grid"]
+  stage_timesteps: [50000, 50000, 100000]
+  stage_thresholds: null
+
+output_dir: "output"
+model_save_path: "models/trafficrl_double.zip"
