@@ -1,0 +1,79 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+
+# Installation logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Environment files
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# Type checking
+.mypy_cache/
+.pyre/
+.pytype/
+
+# Ruff
+.ruff_cache/
+
+# TensorBoard logs
+logs/
+runs/
+
+# Model checkpoints (not committed - large files)
+models/
+*.zip
+*.pkl
+
+# Output files
+output/
+*.json
+
+# SUMO generated files
+networks/*.net.xml
+routes/*.rou.xml
+*.sumocfg
+tripinfo.xml
+summary.xml
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Coverage
+coverage.xml

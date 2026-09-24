@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trafficrl"
+version = "0.1.0"
+description = "SUMO traffic simulation + PPO agent for adaptive signal control"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+dependencies = [
+    "gymnasium>=0.29.0",
+    "stable-baselines3>=2.0.0",
+    "sumo>=1.19.0",
+    "sumo-tools>=1.19.0",
+    "pyyaml>=6.0",
+    "tensorboard>=2.14.0",
+    "numpy>=1.24.0",
+]
+optional-dependencies = {
+    dev = [
+        "pytest>=7.4.0",
+        "pytest-cov>=4.1.0",
+        "ruff>=0.1.0",
+        "black>=23.0.0",
+    ]
+}
+
+[project.scripts]
+trafficrl = "trafficrl.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["trafficrl*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+select = ["E", "F", "I", "UP", "W"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
